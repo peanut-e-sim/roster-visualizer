@@ -59,6 +59,15 @@ body{font-family:var(--font);color:var(--ink);
 .sw.blue{background:var(--fly-blue);border:none}.sw.rose{background:var(--fly-rose);border:none}
 .sw.standby{background:var(--standby);border:none}.sw.train{background:var(--train-bg);border:none}
 .sw.leave{background:var(--leave-bg);border:none}.sw.off{background:#fff}.sw.other{background:var(--other-bg);border:none}
+/* legend icon chips — mirror the in-cell glyphs */
+.lgc{width:20px;height:20px;border-radius:6px;display:inline-grid;place-items:center;border:1px solid rgba(255,255,255,.18);flex:0 0 auto}
+.lgc svg{width:13px;height:13px}
+.lgc.fly{background:var(--fly-blue);border:none}.lgc.fly.rose{background:var(--fly-rose)}.lgc.fly svg{fill:#fff}
+.lgc.off{background:#fff;border-color:var(--line)}.lgc.off svg{fill:var(--off-ink)}
+.lgc.standby{background:var(--standby);border:none}.lgc.standby svg{fill:#fff}
+.lgc.training{background:var(--train-bg);border-color:#f1e4c4}.lgc.training svg{fill:var(--train-ink)}
+.lgc.leave{background:var(--leave-bg);border-color:#cdeee6}.lgc.leave svg{fill:var(--leave-ink)}
+.lgc.other{background:var(--other-bg)}.lgc.other .q{font-size:.72rem;font-weight:800;color:var(--other-ink);line-height:1}
 
 /* roster card */
 .roster{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow);
@@ -138,13 +147,13 @@ body{font-family:var(--font);color:var(--ink);
   <div class="bar">
     <div class="filters" id="filters"></div>
     <div class="legend">
-      <span class="lg"><span class="sw blue"></span>Flight</span>
-      <span class="lg"><span class="sw rose"></span>Alt pairing</span>
-      <span class="lg"><span class="sw off"></span>Off (XX)</span>
-      <span class="lg"><span class="sw standby"></span>Standby</span>
-      <span class="lg"><span class="sw train"></span>Training</span>
-      <span class="lg"><span class="sw leave"></span>Leave</span>
-      <span class="lg"><span class="sw other"></span>Other</span>
+      <span class="lg"><span class="lgc fly blue" data-ic="fly"></span>Flight</span>
+      <span class="lg"><span class="lgc fly rose" data-ic="fly"></span>Alt pairing</span>
+      <span class="lg"><span class="lgc off" data-ic="off"></span>Off (XX)</span>
+      <span class="lg"><span class="lgc standby" data-ic="standby"></span>Standby</span>
+      <span class="lg"><span class="lgc training" data-ic="training"></span>Training</span>
+      <span class="lg"><span class="lgc leave" data-ic="leave"></span>Leave</span>
+      <span class="lg"><span class="lgc other" data-ic="other"></span>Other</span>
     </div>
   </div>
 
@@ -240,6 +249,12 @@ function buildFilters(periods){
 }
 var periods=buildIntel();buildFilters(periods);
 var app=document.getElementById("app");ROSTERS.forEach(function(r,i){app.appendChild(buildRoster(r,i+1));});
+/* populate legend chips with the real cell glyphs */
+Array.prototype.forEach.call(document.querySelectorAll(".lgc[data-ic]"),function(c){
+  var t=c.getAttribute("data-ic");
+  if(t==="other"){var q=document.createElement("span");q.className="q";q.textContent="?";c.appendChild(q);return;}
+  c.appendChild(icon(t));
+});
 </script>
 </body>
 </html>
